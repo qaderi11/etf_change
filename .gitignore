@@ -1,0 +1,14 @@
+# dependencies
+app/node_modules/
+__pycache__/
+*.pyc
+
+# generated
+app/dist/
+output/
+/data/
+!/data/.gitkeep
+
+# os
+.DS_Store
+Thumbs.db
