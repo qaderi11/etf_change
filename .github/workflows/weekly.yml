@@ -12,6 +12,10 @@ on:
         description: '部署前更新行情和信号'
         type: boolean
         default: false
+      send_email:
+        description: '更新行情并发送测试邮件'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -30,26 +34,26 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Python
-        if: github.event_name == 'schedule' || inputs.refresh_data
+        if: github.event_name == 'schedule' || inputs.refresh_data || inputs.send_email
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
           cache: pip
 
       - name: Install Python deps
-        if: github.event_name == 'schedule' || inputs.refresh_data
+        if: github.event_name == 'schedule' || inputs.refresh_data || inputs.send_email
         run: pip install -r requirements.txt
 
       - name: Refresh prices
-        if: github.event_name == 'schedule' || inputs.refresh_data
+        if: github.event_name == 'schedule' || inputs.refresh_data || inputs.send_email
         run: python scripts/fetch_prices.py
 
       - name: Build signal data
-        if: github.event_name == 'schedule' || inputs.refresh_data
+        if: github.event_name == 'schedule' || inputs.refresh_data || inputs.send_email
         run: python scripts/build_data.py
 
       - name: Commit data
-        if: github.event_name == 'schedule' || inputs.refresh_data
+        if: github.event_name == 'schedule' || inputs.refresh_data || inputs.send_email
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -84,6 +88,14 @@ jobs:
         with:
           path: app/dist
 
+      - name: Save signal for email
+        if: github.event_name == 'schedule' || inputs.send_email
+        uses: actions/upload-artifact@v4
+        with:
+          name: email-signal
+          path: app/public/data/latest.json
+          retention-days: 1
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -94,3 +106,20 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  email:
+    if: github.event_name == 'schedule' || inputs.send_email
+    needs: [build, deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: email-signal
+          path: email-data
+      - name: Send weekly signal email
+        env:
+          QQ_MAIL_USER: ${{ secrets.QQ_MAIL_USER }}
+          QQ_MAIL_AUTH_CODE: ${{ secrets.QQ_MAIL_AUTH_CODE }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: python scripts/send_email.py email-data/latest.json
