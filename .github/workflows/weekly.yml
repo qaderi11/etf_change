@@ -93,7 +93,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: email-signal
-          path: app/public/data/latest.json
+          path: |
+            app/public/data/latest.json
+            app/public/data/nav.json
+            app/public/data/meta.json
           retention-days: 1
 
   deploy:
@@ -117,6 +120,8 @@ jobs:
         with:
           name: email-signal
           path: email-data
+      - name: Install chart dependency
+        run: python -m pip install 'matplotlib>=3.8,<4'
       - name: Send weekly signal email
         env:
           QQ_MAIL_USER: ${{ secrets.QQ_MAIL_USER }}
