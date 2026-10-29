@@ -31,6 +31,8 @@ export interface Latest {
 export interface NavPoint {
   date: string
   nav: number
+  sp500: number | null
+  hs300: number | null
 }
 
 export interface SignalRow {

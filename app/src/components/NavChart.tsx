@@ -3,6 +3,8 @@ import {
   Area,
   AreaChart,
   CartesianGrid,
+  Legend,
+  Line,
   ReferenceLine,
   ResponsiveContainer,
   Tooltip,
@@ -13,6 +15,8 @@ import {
 export interface RetPoint {
   date: string
   ret: number
+  sp500: number | null
+  hs300: number | null
 }
 
 const fmtDate = (iso: string) => iso.slice(0, 7).replace('-', '/')
@@ -39,7 +43,7 @@ export function NavChart({ data, stepMonths = 0 }: { data: RetPoint[]; stepMonth
   const ticks = useMemo(() => ticksOf(data, stepMonths), [data, stepMonths])
   const { domain, yticks } = useMemo(() => {
     if (!data.length) return { domain: [-0.01, 0.01] as [number, number], yticks: [-0.01, 0, 0.01] }
-    const vals = data.map((d) => d.ret)
+    const vals = data.flatMap((d) => [d.ret, d.sp500, d.hs300]).filter((v): v is number => v != null && Number.isFinite(v))
     const lo = Math.min(0, ...vals)
     const hi = Math.max(0, ...vals)
     const span = hi - lo || 1
@@ -90,9 +94,12 @@ export function NavChart({ data, stepMonths = 0 }: { data: RetPoint[]; stepMonth
               boxShadow: '0 8px 24px rgba(0,0,0,.06)',
             }}
             labelFormatter={(v) => fmtDate(String(v))}
-            formatter={(v: number) => [`${(v * 100).toFixed(1)}%`, '区间收益']}
+            formatter={(v: number) => `${(v * 100).toFixed(1)}%`}
           />
-          <Area type="monotone" dataKey="ret" stroke="#b23a2f" strokeWidth={2} fill="url(#navFill)" />
+          <Legend wrapperStyle={{ fontSize: 12 }} />
+          <Area name="策略" type="monotone" dataKey="ret" stroke="#b23a2f" strokeWidth={2} fill="url(#navFill)" />
+          <Line name="标普500 ETF" type="monotone" dataKey="sp500" stroke="#1f7a5c" strokeWidth={1.8} dot={false} />
+          <Line name="沪深300 ETF" type="monotone" dataKey="hs300" stroke="#2c5282" strokeWidth={1.8} dot={false} />
         </AreaChart>
       </ResponsiveContainer>
     </div>

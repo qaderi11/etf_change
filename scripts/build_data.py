@@ -62,8 +62,15 @@ def main() -> None:
     nav_w = nav_w / nav_w.iloc[0]
 
     # ---------- nav.json ----------
-    nav_points = [{"date": d.strftime("%Y-%m-%d"), "nav": round(float(v), 4)}
-                  for d, v in nav_w.items()]
+    # ETF 前复权收盘价按同一周频采样，缺失周沿用之前可获得的价格。
+    benchmarks = close[["513500", "510300"]].resample("W-FRI").last().ffill().reindex(nav_w.index)
+    nav_points = []
+    for d, v in nav_w.items():
+        point = {"date": d.strftime("%Y-%m-%d"), "nav": round(float(v), 4)}
+        for code, key in [("513500", "sp500"), ("510300", "hs300")]:
+            price = benchmarks.at[d, code]
+            point[key] = round(float(price), 6) if pd.notna(price) else None
+        nav_points.append(point)
     (OUT / "nav.json").write_text(json.dumps(nav_points, ensure_ascii=False), encoding="utf-8")
 
     # ---------- latest.json ----------

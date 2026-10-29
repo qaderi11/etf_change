@@ -33,7 +33,14 @@ export function HistoryPage({
   const range = RANGES[rangeIdx]
   const view = range.weeks ? nav.slice(-(range.weeks + 1)) : nav
   const base = view.length ? view[0].nav : 1
-  const chartData = view.map((p) => ({ date: p.date, ret: p.nav / base - 1 }))
+  const spBase = view[0]?.sp500
+  const hsBase = view[0]?.hs300
+  const chartData = view.map((p) => ({
+    date: p.date,
+    ret: p.nav / base - 1,
+    sp500: spBase && p.sp500 != null ? p.sp500 / spBase - 1 : null,
+    hs300: hsBase && p.hs300 != null ? p.hs300 / hsBase - 1 : null,
+  }))
   const viewReturn = view.length > 1 ? view[view.length - 1].nav / base - 1 : 0
   const ddView = drawdownSeries(view)
   const viewMdd = ddView.reduce((m, d) => Math.min(m, d.dd), 0)
@@ -83,6 +90,7 @@ export function HistoryPage({
           ))}
         </div>
         <NavChart data={chartData} stepMonths={range.step} />
+        <p className="hint">对比基准：标普500 ETF（513500）、沪深300 ETF（510300）前复权价格；区间起点均归零。</p>
       </section>
 
       <section className="card">
