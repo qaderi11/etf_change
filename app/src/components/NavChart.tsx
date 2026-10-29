@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import {
   Area,
-  AreaChart,
+  ComposedChart,
   CartesianGrid,
   Legend,
   Line,
@@ -58,7 +58,7 @@ export function NavChart({ data, stepMonths = 0 }: { data: RetPoint[]; stepMonth
   return (
     <div className="chart">
       <ResponsiveContainer width="100%" height={250}>
-        <AreaChart data={data} margin={{ top: 8, right: 6, left: 0, bottom: 0 }}>
+        <ComposedChart data={data} margin={{ top: 8, right: 6, left: 0, bottom: 0 }}>
           <defs>
             <linearGradient id="navFill" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#b23a2f" stopOpacity={0.22} />
@@ -100,8 +100,9 @@ export function NavChart({ data, stepMonths = 0 }: { data: RetPoint[]; stepMonth
           <Area name="策略" type="monotone" dataKey="ret" stroke="#b23a2f" strokeWidth={2} fill="url(#navFill)" />
           <Line name="标普500 ETF" type="monotone" dataKey="sp500" stroke="#1f7a5c" strokeWidth={1.8} dot={false} />
           <Line name="沪深300 ETF" type="monotone" dataKey="hs300" stroke="#2c5282" strokeWidth={1.8} dot={false} />
-        </AreaChart>
+        </ComposedChart>
       </ResponsiveContainer>
     </div>
   )
 }
+
