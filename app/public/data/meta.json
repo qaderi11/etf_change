@@ -18,13 +18,13 @@
     "cost": 0.0005
   },
   "expected": {
-    "cagr": 0.1319,
-    "vol": 0.1026,
-    "sharpe": 1.109,
+    "cagr": 0.1307,
+    "vol": 0.1028,
+    "sharpe": 1.096,
     "mdd": -0.1141,
-    "calmar": 1.155,
+    "calmar": 1.145,
     "start": "2015-01-12",
-    "end": "2026-10-30"
+    "end": "2026-11-06"
   },
   "yearly": [
     {
@@ -69,79 +69,79 @@
     },
     {
       "year": 2026,
-      "ret": 0.0734
+      "ret": 0.0629
     }
   ],
   "validation": {
     "start_sensitivity": [
       {
         "start": 2015,
-        "cagr": 0.1319,
-        "sharpe": 1.11,
+        "cagr": 0.1307,
+        "sharpe": 1.1,
         "mdd": -0.1141
       },
       {
         "start": 2016,
-        "cagr": 0.1421,
-        "sharpe": 1.21,
+        "cagr": 0.1408,
+        "sharpe": 1.2,
         "mdd": -0.1037
       },
       {
         "start": 2017,
-        "cagr": 0.1304,
-        "sharpe": 1.12,
+        "cagr": 0.129,
+        "sharpe": 1.1,
         "mdd": -0.1037
       },
       {
         "start": 2018,
-        "cagr": 0.1247,
-        "sharpe": 1.06,
+        "cagr": 0.1232,
+        "sharpe": 1.04,
         "mdd": -0.1037
       },
       {
         "start": 2019,
-        "cagr": 0.1436,
-        "sharpe": 1.23,
+        "cagr": 0.1418,
+        "sharpe": 1.21,
         "mdd": -0.0903
       },
       {
         "start": 2020,
-        "cagr": 0.1471,
-        "sharpe": 1.23,
+        "cagr": 0.145,
+        "sharpe": 1.21,
         "mdd": -0.0903
       },
       {
         "start": 2021,
-        "cagr": 0.1348,
-        "sharpe": 1.14,
+        "cagr": 0.1325,
+        "sharpe": 1.11,
         "mdd": -0.0903
       },
       {
         "start": 2022,
-        "cagr": 0.1474,
-        "sharpe": 1.25,
+        "cagr": 0.1445,
+        "sharpe": 1.22,
         "mdd": -0.0903
       }
     ],
     "frequency": [
       {
         "freq": "周",
-        "cagr": 0.1319,
-        "sharpe": 1.11,
+        "cagr": 0.1307,
+        "sharpe": 1.1,
         "mdd": -0.1141,
-        "cost": 0.0862
+        "cost": 0.0863
       },
       {
         "freq": "月",
-        "cagr": 0.1305,
-        "sharpe": 1.04,
+        "cagr": 0.1293,
+        "sharpe": 1.02,
         "mdd": -0.15,
-        "cost": 0.0442
+        "cost": 0.0444
       },
       {
         "freq": "季",
-        "cagr": 0.0894,
-        "sharpe": 0.65,
+        "cagr": 0.0883,
+        "sharpe": 0.64,
         "mdd": -0.1964,
         "cost": 0.0224
       },
@@ -153,9 +153,9 @@
         "cost": 0.0138
       }
     ],
-    "t_stat_vs_ew": 0.78,
-    "excess_vs_ew": 0.003,
+    "t_stat_vs_ew": 0.75,
+    "excess_vs_ew": 0.0029,
     "note": "起点敏感性与频率对比按当前口径（含 3% 趋势阈值）重算；参数网格基于旧口径。"
   },
-  "generated_at": "2026-10-30T23:15:52+08:00"
+  "generated_at": "2026-11-07T00:11:21+08:00"
 }
